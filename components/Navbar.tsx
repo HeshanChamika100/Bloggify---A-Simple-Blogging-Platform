@@ -4,7 +4,25 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, isLoading, logout } = useAuth();
+
+  if (isLoading) {
+    return (
+      <nav className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-4xl mx-auto px-8 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="text-xl font-bold text-blue-600 hover:text-blue-700 transition">
+            Bloggify
+          </Link>
+
+          {/* Loading state - show nothing for auth-related content */}
+          <div className="flex items-center gap-6">
+            {/* Empty during loading to prevent hydration mismatch */}
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-sm">
