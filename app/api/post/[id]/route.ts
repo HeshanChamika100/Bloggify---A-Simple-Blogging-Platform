@@ -36,6 +36,40 @@ export async function PUT(request: Request, context: Context) {
     const body = await request.json();
     const { title, content } = body;
 
+    // Get the auth_token from cookies
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token")?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
+    }
+
+    // Decode the token to see who is making the request
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as { authorId: string };
+    } catch (err) {
+      return NextResponse.json({ error: "Invalid or expired token." }, { status: 401 });
+    }
+
+    // Find the post the user is trying to update
+    const post = await prisma.post.findUnique({
+      where: { id: id },
+    });
+
+    if (!post) {
+      return NextResponse.json({ error: "Post not found." }, { status: 404 });
+    }
+
+    // Authorization check: Is this user the owner?
+    if (post.authorId !== decoded.authorId) {
+      return NextResponse.json(
+        { error: "Forbidden. You can only update your own posts." },
+        { status: 403 }
+      );
+    }
+
+    // If they passed the check, update the post
     const updatedPost = await prisma.post.update({
       where: { id: id },
       data: { 
@@ -48,8 +82,8 @@ export async function PUT(request: Request, context: Context) {
   } catch (error) {
     console.error("Error updating post:", error);
     return NextResponse.json(
-      { error: 'Failed to update. Post may not exist.' },
-      { status: 400 }
+      { error: 'Internal server error.' },
+      { status: 500 }
     );
   }
 }
