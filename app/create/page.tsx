@@ -20,17 +20,27 @@ export default function CreatePostPage() {
   // If the user isn't logged in, don't let them see the form
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto p-8 mt-20 text-center bg-white rounded-lg border border-gray-200 shadow-sm">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          You must be logged in to create a post.
-        </h2>
-        <Link
-          href="/login"
-          className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          Go to Login
-        </Link>
-      </div>
+      <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-6">
+        <div className="text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-stone-100 flex items-center justify-center">
+            <svg className="w-8 h-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-stone-900 mb-2">
+            Sign in required
+          </h2>
+          <p className="text-sm text-stone-500 mb-6">
+            You need to be logged in to create a post.
+          </p>
+          <Link
+            href="/login"
+            className="inline-block bg-indigo-500 text-white text-sm font-medium px-6 py-2.5 rounded-xl hover:bg-indigo-600 transition-all hover:shadow-md active:scale-[0.98]"
+          >
+            Go to Login
+          </Link>
+        </div>
+      </main>
     );
   }
 
@@ -80,51 +90,58 @@ export default function CreatePostPage() {
   };
 
   return (
-    <main className="max-w-2xl mx-auto p-8 mt-8">
-      <div className="flex items-center mb-8 gap-4">
-        <Link href="/" className="text-gray-500 hover:text-gray-800 transition">
-          &larr; Back
-        </Link>
-        <h1 className="text-3xl font-bold">Create a New Post</h1>
-      </div>
+    <main className="max-w-2xl mx-auto px-6 py-10">
+      {/* Back link */}
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1 text-sm text-stone-400 hover:text-stone-600 transition-colors mb-6"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
 
+      <h1 className="text-2xl font-bold text-stone-900 mb-6">Create a new post</h1>
+
+      {/* Error */}
       {error && (
-        <div className="bg-red-50 text-red-600 p-4 rounded-md mb-6">
+        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-6 border border-red-100">
           {error}
         </div>
       )}
 
-      {/* Show who is posting so the user knows the app remembers them */}
-      <div className="mb-6 bg-blue-50 p-4 rounded-md border border-blue-100 flex items-center gap-3">
-        <div className="w-10 h-10 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center font-bold text-lg">
-          {user.name.charAt(0).toUpperCase()}
+      {/* Author badge */}
+      <div className="mb-6 bg-indigo-50 px-4 py-3 rounded-xl border border-indigo-100 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
+          <span className="text-white font-semibold text-sm">
+            {user.name.charAt(0).toUpperCase()}
+          </span>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-900">
-            Posting as {user.name}
+          <p className="text-sm font-medium text-stone-900">
+            {user.name}
           </p>
-          <p className="text-xs text-gray-500">{user.email}</p>
+          <p className="text-xs text-stone-500">{user.email}</p>
         </div>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 bg-white p-6 rounded-lg border border-gray-200 shadow-sm"
-      >
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-stone-700 mb-1.5"
           >
-            Post Title
+            Title
           </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="My Awesome Blog Post"
+            className="w-full bg-white border border-stone-200 rounded-xl px-4 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 transition-all hover:border-stone-300"
+            placeholder="Give your post a title..."
             disabled={isSubmitting}
           />
         </div>
@@ -132,17 +149,17 @@ export default function CreatePostPage() {
         <div>
           <label
             htmlFor="content"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-stone-700 mb-1.5"
           >
-            Post Content
+            Content
           </label>
           <textarea
             id="content"
-            rows={8}
+            rows={10}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-            placeholder="Write your content here..."
+            className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 transition-all hover:border-stone-300 resize-none leading-relaxed"
+            placeholder="Write your thoughts..."
             disabled={isSubmitting}
           />
         </div>
@@ -150,10 +167,10 @@ export default function CreatePostPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-3 rounded-md text-white font-medium transition ${
+          className={`w-full py-3 rounded-xl text-white font-medium text-sm transition-all active:scale-[0.98] ${
             isSubmitting
-              ? "bg-blue-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
+              ? "bg-indigo-300 cursor-not-allowed"
+              : "bg-indigo-500 hover:bg-indigo-600 hover:shadow-md"
           }`}
         >
           {isSubmitting ? "Publishing..." : "Publish Post"}

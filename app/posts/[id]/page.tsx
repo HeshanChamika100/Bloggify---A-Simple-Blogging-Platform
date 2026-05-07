@@ -74,60 +74,96 @@ export default function PostDetailsPage() {
   // Loading
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto p-8 text-center">
-        <p className="text-xl text-gray-500">Loading post details...</p>
-      </div>
+      <main className="max-w-3xl mx-auto px-6 py-10">
+        <div className="w-24 h-5 bg-stone-100 rounded loading-pulse mb-8" />
+        <div className="bg-white rounded-2xl border border-stone-200 p-8">
+          <div className="w-3/4 h-8 bg-stone-100 rounded-lg loading-pulse mb-4" />
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-stone-100">
+            <div className="w-10 h-10 rounded-full bg-stone-100 loading-pulse" />
+            <div>
+              <div className="w-32 h-4 bg-stone-100 rounded loading-pulse mb-2" />
+              <div className="w-48 h-3 bg-stone-50 rounded loading-pulse" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="w-full h-4 bg-stone-50 rounded loading-pulse" />
+            <div className="w-full h-4 bg-stone-50 rounded loading-pulse" />
+            <div className="w-2/3 h-4 bg-stone-50 rounded loading-pulse" />
+          </div>
+        </div>
+      </main>
     );
   }
 
   // Error or Post Not Found
   if (error || !post) {
     return (
-      <div className="max-w-3xl mx-auto p-8 text-center">
-        <div className="bg-red-50 text-red-600 p-4 rounded-md mb-4">
+      <main className="max-w-3xl mx-auto px-6 py-10 text-center">
+        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-6 border border-red-100">
           {error}
         </div>
-        <Link href="/" className="text-blue-600 hover:underline">
-          &larr; Back to Home
+        <Link
+          href="/"
+          className="text-sm text-indigo-600 font-medium hover:text-indigo-700 transition-colors"
+        >
+          ← Back to Home
         </Link>
-      </div>
+      </main>
     );
   }
 
   return (
-    <main className="max-w-3xl mx-auto p-8">
-      {/* Navigation and Actions */}
+    <main className="max-w-3xl mx-auto px-6 py-10">
+      {/* Top bar */}
       <div className="mb-8 flex justify-between items-center">
-        <Link href="/" className="text-gray-500 hover:text-gray-800 transition">
-          &larr; Back to all posts
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm text-stone-400 hover:text-stone-600 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          All posts
         </Link>
         {/* this button only shows if the user is logged in and owner of the post */}
         {user && post.authorId === user.id && (
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="text-red-600 hover:text-red-800 transition text-sm font-medium"
+            className="text-sm text-stone-400 hover:text-red-500 font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
           >
-            {isDeleting ? "Deleting..." : "Delete Post"}
+            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         )}
       </div>
 
       {/* Post Content */}
-      <article className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900">{post.title}</h1>
+      <article className="bg-white rounded-2xl border border-stone-200 p-8 shadow-sm">
+        <h1 className="text-3xl font-bold text-stone-900 mb-5 leading-tight">
+          {post.title}
+        </h1>
 
-        <div className="flex items-center text-gray-500 mb-8 pb-4 border-b border-gray-100">
+        <div className="flex items-center gap-3 mb-8 pb-6 border-b border-stone-100">
+          <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-semibold text-sm">
+              {post.author?.name?.charAt(0).toUpperCase() || "?"}
+            </span>
+          </div>
           <div>
-            <p className="font-medium text-gray-900">By {post.author?.name}</p>
-            <p className="text-sm">
-              {post.author?.email} •{" "}
-              {new Date(post.createdAt).toLocaleDateString()}
+            <p className="text-sm font-medium text-stone-900">
+              {post.author?.name}
+            </p>
+            <p className="text-xs text-stone-500">
+              {new Date(post.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
           </div>
         </div>
 
-        <div className="prose max-w-none text-gray-800 whitespace-pre-wrap leading-relaxed">
+        <div className="text-stone-700 whitespace-pre-wrap leading-relaxed text-[15px]">
           {post.content}
         </div>
       </article>
