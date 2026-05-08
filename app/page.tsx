@@ -78,16 +78,15 @@ export default function HomePage() {
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-12">
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-stone-900 mb-1">Blog Posts</h1>
-        <p className="text-stone-500">Discover stories, ideas, and insights</p>
-      </div>
+      {/* Header + Search */}
+      <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-stone-900 mb-1">Blog Posts</h1>
+          <p className="text-stone-500">Discover stories, ideas, and insights</p>
+        </div>
 
-      {/* Search */}
-      {posts.length > 0 && (
-        <div className="mb-8">
-          <div className="relative max-w-md">
+        {posts.length > 0 && (
+          <div className="relative w-full md:w-72">
             <svg
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
               fill="none"
@@ -109,8 +108,8 @@ export default function HomePage() {
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-xl text-sm text-stone-900 placeholder:text-stone-400 transition-all hover:border-stone-300"
             />
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Post Grid */}
       {posts.length === 0 ? (
