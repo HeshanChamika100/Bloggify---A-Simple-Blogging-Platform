@@ -268,6 +268,23 @@ All error responses follow a consistent structure:
 }
 ```
 
+
+---
+
+## Approximate Time Spent
+
+| Area | Hours |
+|------|-------|
+| Project setup & database design | ~2 |
+| Backend API development | ~4 |
+| Frontend pages & components | ~4 |
+| Authentication implementation | ~3 |
+| Search & skeleton loaders | ~2 |
+| Styling & polish | ~2 |
+| Testing & debugging | ~3 |
+| Documentation | ~1 |
+| **Total** | **~21** |
+
 ---
 
 ## Tech Stack
