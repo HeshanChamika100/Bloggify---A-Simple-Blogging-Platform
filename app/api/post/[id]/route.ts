@@ -6,11 +6,11 @@ import jwt from "jsonwebtoken";
 // GET /post/:id - Get a single post
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     // Getting the id from the URL parameters
-    const { id } = context.params;
+    const { id } = await context.params;
 
     const post = await prisma.post.findUnique({
       where: { id: id },
@@ -31,10 +31,10 @@ export async function GET(
 // PUT /post/:id - Update an existing post
 export async function PUT(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params; // Await the params
+    const { id } = await context.params;
     const body = await request.json();
     const { title, content } = body;
 
@@ -93,10 +93,10 @@ export async function PUT(
 // DELETE /post/:id - Delete a post
 export async function DELETE(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params; 
+    const { id } = await context.params;
 
     // Get the auth_token from cookies
     const cookieStore = await cookies();
