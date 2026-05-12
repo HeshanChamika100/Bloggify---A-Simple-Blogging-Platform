@@ -3,12 +3,11 @@ import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import jwt from "jsonwebtoken";
 
-type Context = {
-  params: Promise<{ id: string }>;
-};
-
 // GET /post/:id - Get a single post
-export async function GET(request: Request, context: Context) {
+export async function GET(
+  request: Request,
+  context: { params: { id: string } }
+) {
   try {
     // Getting the id from the URL parameters
     const { id } = await context.params;
@@ -30,7 +29,10 @@ export async function GET(request: Request, context: Context) {
 }
 
 // PUT /post/:id - Update an existing post
-export async function PUT(request: Request, context: Context) {
+export async function PUT(
+  request: Request,
+  context: { params: { id: string } }
+) {
   try {
     const { id } = await context.params; // Await the params
     const body = await request.json();
@@ -89,7 +91,10 @@ export async function PUT(request: Request, context: Context) {
 }
 
 // DELETE /post/:id - Delete a post
-export async function DELETE(request: Request, context: Context) {
+export async function DELETE(
+  request: Request,
+  context: { params: { id: string } }
+) {
   try {
     const { id } = await context.params; 
 
