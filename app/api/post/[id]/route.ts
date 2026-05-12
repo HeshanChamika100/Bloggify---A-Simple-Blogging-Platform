@@ -51,7 +51,7 @@ export async function PUT(
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as { authorId: string };
     } catch (err) {
-      return NextResponse.json({ error: "Invalid or expired token." }, { status: 401 });
+      return NextResponse.json({ error: "Invalid or expired token.", err }, { status: 401 });
     }
 
     // Find the post the user is trying to update
@@ -111,7 +111,7 @@ export async function DELETE(
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as { authorId: string };
     } catch (err) {
-      return NextResponse.json({ error: "Invalid or expired token." }, { status: 401 });
+      return NextResponse.json({ error: "Invalid or expired token.", err }, { status: 401 });
     }
 
     // Find the post the user is trying to delete
