@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     // Getting the id from the URL parameters
-    const { id } = await context.params;
+    const { id } = context.params;
 
     const post = await prisma.post.findUnique({
       where: { id: id },
@@ -34,7 +34,7 @@ export async function PUT(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params; // Await the params
+    const { id } = context.params; // Await the params
     const body = await request.json();
     const { title, content } = body;
 
@@ -96,7 +96,7 @@ export async function DELETE(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params; 
+    const { id } = context.params; 
 
     // Get the auth_token from cookies
     const cookieStore = await cookies();
