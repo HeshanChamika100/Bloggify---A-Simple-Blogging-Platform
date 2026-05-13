@@ -49,7 +49,7 @@ export async function PUT(
     // Decode the token to see who is making the request
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as { authorId: string };
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { authorId: string };
     } catch (err) {
       return NextResponse.json({ error: "Invalid or expired token.", err }, { status: 401 });
     }
@@ -109,7 +109,7 @@ export async function DELETE(
     // Decode the token to see who is making the request
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as { authorId: string };
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { authorId: string };
     } catch (err) {
       return NextResponse.json({ error: "Invalid or expired token.", err }, { status: 401 });
     }
