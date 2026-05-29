@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -27,6 +26,7 @@ export default function ProfilePage() {
     }
 
     if (user) {
+      // Update local form state when auth user changes
       setName(user.name);
       setEmail(user.email);
     }

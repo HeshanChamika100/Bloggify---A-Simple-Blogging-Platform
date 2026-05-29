@@ -23,7 +23,7 @@ export default function HomePage() {
         }
         const data = await response.json();
         setPosts(data);
-      } catch (err) {
+      } catch {
         setError("Unable to load posts. Please try again later.");
       } finally {
         setIsLoading(false);
