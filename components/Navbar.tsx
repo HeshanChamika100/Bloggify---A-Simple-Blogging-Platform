@@ -32,6 +32,12 @@ export default function Navbar() {
                 <span className="text-stone-900 font-medium">{user.name}</span>
               </span>
               <Link
+                href="/profile"
+                className="text-sm font-medium text-stone-600 hover:text-indigo-600 transition-colors px-2 py-2"
+              >
+                Edit Profile
+              </Link>
+              <Link
                 href="/create"
                 className="text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg px-4 py-2 transition-all hover:shadow-md active:scale-[0.97]"
               >

@@ -56,9 +56,10 @@ export default function CreatePostPage() {
     }
 
     try {
-      const response = await fetch("/api/post", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         // Automatically inject the logged in user's name and email
         body: JSON.stringify({
           name: user.name,

@@ -15,7 +15,9 @@ export default function HomePage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("/api/posts");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
+          credentials: "include"
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
         }

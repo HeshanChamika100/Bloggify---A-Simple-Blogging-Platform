@@ -32,7 +32,9 @@ export default function PostDetailsPage() {
 
     const fetchPost = async () => {
       try {
-        const response = await fetch(`/api/post/${id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
+          credentials: "include"
+        });
 
         if (response.status === 404) {
           throw new Error("Post not found.");
@@ -81,9 +83,10 @@ export default function PostDetailsPage() {
     setEditError(null);
 
     try {
-      const response = await fetch(`/api/post/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ title: editTitle, content: editContent }),
       });
 
@@ -115,8 +118,9 @@ export default function PostDetailsPage() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/post/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {
