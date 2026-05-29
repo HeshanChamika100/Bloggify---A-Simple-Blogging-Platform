@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import type { Post } from "@/types";
 
 export default function ProfilePage() {
   const { user, isLoading, updateProfile } = useAuth();
@@ -15,6 +16,9 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [postsLoading, setPostsLoading] = useState(false);
+  const [postsError, setPostsError] = useState("");
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -27,6 +31,43 @@ export default function ProfilePage() {
       setEmail(user.email);
     }
   }, [isLoading, router, user]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!user) {
+        return;
+      }
+
+      setPostsLoading(true);
+      setPostsError("");
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors/history`, {
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch post history.");
+        }
+
+        setPosts(data);
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : typeof err === "string"
+              ? err
+              : "Failed to fetch post history.";
+        setPostsError(message);
+      } finally {
+        setPostsLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -181,6 +222,56 @@ export default function ProfilePage() {
             </button>
           </div>
         </form>
+      </section>
+
+      <section className="mt-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-[0_12px_40px_-24px_rgba(0,0,0,0.2)]">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-indigo-600 mb-2">Publishing history</p>
+            <h2 className="text-2xl font-bold text-stone-900">Your posts</h2>
+          </div>
+          <span className="text-sm text-stone-500">
+            {posts.length} {posts.length === 1 ? "post" : "posts"}
+          </span>
+        </div>
+
+        {postsLoading ? (
+          <div className="space-y-3">
+            <div className="h-16 rounded-2xl bg-stone-50 loading-pulse" />
+            <div className="h-16 rounded-2xl bg-stone-50 loading-pulse" />
+          </div>
+        ) : postsError ? (
+          <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {postsError}
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-stone-200 bg-stone-50 px-4 py-8 text-center text-stone-500">
+            You have not published any posts yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {posts.map((post) => (
+              <article
+                key={post.id}
+                className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4 transition-colors hover:border-stone-300"
+              >
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold text-stone-900">{post.title}</h3>
+                    <p className="mt-1 text-sm text-stone-500 line-clamp-2">{post.content}</p>
+                  </div>
+                  <div className="text-sm text-stone-400 sm:text-right">
+                    {new Date(post.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
